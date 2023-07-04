@@ -1,0 +1,126 @@
+CREATE DATABASE BaoMatVideo
+ON
+PRIMARY
+(
+	NAME = BaoMatVideo_Data,
+	FILENAME = 'D:\BaoMatVideo_Data.mdf',
+	SIZE = 1 GB,
+	MAXSIZE = UNLIMITED,
+	FILEGROWTH = 10%)
+LOG ON
+(	NAME = BaoMatVideo_Log,
+	FILENAME = 'D:\BaoMatVideo_Log.ldf',
+	SIZE = 1 GB,
+	MAXSIZE = UNLIMITED,
+	FILEGROWTH = 10%)
+
+GO
+
+
+INSERT INTO dbo.Account
+(UserName ,
+ DisplayName,
+ PassWord ,
+ Type
+ )
+VALUES (N'K9' , --UserName - nvarvhar(100)
+		N'RongK9' , --DisplayName - nvarchar(100)
+		N'1' , -- PassWord - nvarchar(1000)
+		1 -- Type - int
+		)
+
+INSERT INTO dbo.Account
+(UserName ,
+ DisplayName,
+ PassWord ,
+ Type
+ )
+VALUES (N'ataff' , --UserName - nvarvhar(100)
+		N'taffe' , -- DisplayName - nvarchar(100)
+		N'1' , -- PassWord - nvarchar(1000)
+		0 -- Type - int
+		)
+
+
+
+
+
+SELECT * FROM dbo.Account
+
+
+CREATE PROCEDURE USP_GetAccountByUserName
+@userName nvarchar(100)
+AS
+BEGIN
+	SELECT * FROM dbo.Account WHERE UserName=@userName
+END
+GO
+
+
+EXEC dbo.USP_GetAccountByUserName @userName = N'K9'-- nvarchar(100)
+
+SELECT COUNT(*) FROM dbo.Account WHERE UserName = N'K9' AND PassWord = N'' OR 1=1 --2' OR 1=1
+
+SELECT DisplayName FROM dbo.Account
+
+EXEC dbo.USP_GetAccountByUserName @userName = N'K9'--nvarchar(100)
+SELECT * FROM dbo.Account WHERE UserName = N'' OR 1=1 --
+
+GO
+
+CREATE PROC USP_Login
+@userName nvarchar(100), @passWord nvarchar(100)
+AS
+BEGIN
+	SELECT * FROM dbo.Account WHERE UserName =@userName AND PassWord = @passWord
+END
+GO
+
+SELECT * FROM dbo.Account WHERE UserName = ' '  AND PassWord = N' ' OR 1=1 --'
+
+SELECT * FROM dbo.Account
+
+GO
+
+CREATE PROC USP_UpdateAccount
+@userName nvarchar(100), @displayName nvarchar(100), @password nvarchar(100), @newPassword nvarchar(100)
+AS
+BEGIN
+		DECLARE @isRightPass int = 0
+
+		SELECT @isRightPass = COUNT(*) FROM dbo.Account WHERE UserName = @userName AND PassWord = @password
+		
+		IF(@isRightPass = 1)
+		BEGIN
+			IF (@newPassword = NULL OR @newPassword = ' ')
+			BEGIN
+				UPDATE dbo.Account SET DisplayName = @displayName WHERE UserName = @userName
+			END
+			ELSE 
+				UPDATE dbo.Account SET DisplayName = @displayName, PassWord= @newPassword WHERE UserName = @userName
+
+		END
+END
+GO
+
+SELECT* FROM dbo.Account
+
+select UserName , DisplayName , Type FROM dbo.Account
+
+INSERT  dbo.Account (UserName, DisplayName, Type) VALUES  (N'{0}', '{1}', '{2}')
+GO
+
+CREATE TABLE Account
+(
+	UserName nvarchar(100) PRIMARY KEY,
+	DisplayName nvarchar(100) NOT NULL DEFAULT N'Kter',
+	PassWord nvarchar(1000) NOT NULL DEFAULT 0 ,
+	Type int NOT NULL DEFAULT 0 --1:admin && 0: staff
+	)
+
+
+	update account set password = N'0' where UserName = N'{0}'
+
+	SELECT UserName , DisplayName , Type FROM dbo.Account
+
+	update account set password = N'0' where UserName = N'{0}'
